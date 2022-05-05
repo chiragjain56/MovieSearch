@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trending Page</title>
+    <style>
+        *{
+            padding: 0px;
+            margin: 0px;
+            box-sizing: border-box;
+        }
+      #movies {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 40px;
+        width: 100%;
+        margin: auto;
+        padding: 20px;
+        
+        /* background-color: aqua; */
+      }
+      #header{
+         
+          padding: 20px 0px;
+        
+          text-align: center;
+          font-size: xx-large;
+          font-weight: bolder;
+          background-color: rgba(248, 230, 207, 0.514);
+           border-radius: 20px;
+           margin: 10px 19px 0px;
+      }
+
+      #movies div{
+       border-radius: 20px;
+       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+      }
+      #movies div p:nth-child(2){
+       padding: 10px;
+       font-size: 18px;
+      font-weight: bolder;
+     
+       
+      }
+      #movies div p:nth-child(3){
+       padding: 5px 10px;
+       font-size: 16px;
+     
+      }
+      #movies div p:nth-child(4){
+       padding: 5px 10px 10px;
+       font-size: 14px;
+       font-weight:500;
+      }
+      #movies img {
+        width: 100%;
+        border-radius: 20px 20px 0px 0px;
+        
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">Trending / Popular Movies</div>
+      <div id="movies"></div>
+    </div>
+  </body>
+</html>
+<script>
+  let API_KEY = "&api_key=0698d5b029ea105a22b2da4a518b2359";
+  let popularMovies = "/discover/movie?sort_by=popularity.desc";
+  let url = "https://api.themoviedb.org/3" + popularMovies + API_KEY;
+
+  async function getMovies() {
+    let res = await fetch(url);
+    let data = await res.json();
+    let moviesData = data.results;
+    console.log(moviesData);
+    displayData(moviesData);
+  }
+  getMovies();
+
+  let displayData = (data) => {
+    document.getElementById("movies").innerHTML = "";
+    data.forEach((ele) => {
+      let div = document.createElement("div");
+      let img = document.createElement("img");
+      img.src = `https://image.tmdb.org/t/p/w500${ele.poster_path}`;
+      let movieName = document.createElement("p");
+      movieName.innerHTML = ele.title;
+      let movieRelease = document.createElement("p");
+      movieRelease.innerHTML = `Release Date :-${ele.release_date}`;
+      let movieRating = document.createElement("p");
+      movieRating.innerHTML = `Rating :- ${ele.vote_average}/10 ★`;
+
+      div.append(img, movieName, movieRelease, movieRating);
+      document.getElementById("movies").append(div);
+    });
+  };
+</script>
